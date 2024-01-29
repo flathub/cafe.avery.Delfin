@@ -454,5 +454,5 @@ modules:
       - "-Dflatpak=true"
     sources:
       - type: archive
-        url: https://codeberg.org/avery42/delfin/releases/download/v0.3.0/delfin-flatpak-dist-v0.3.0.tar.xz
-        sha256: d20b2f0ec8efa1c5f05fa93c7c0a4fd4913070ddc46b8141186755b6caf5a3e8
+        url: https://codeberg.org/avery42/delfin/releases/download/v0.4.0/delfin-flatpak-dist-v0.4.0.tar.xz
+        sha256: 982dae52e81e64fdc0763b7738ebc5f33f9e82af23bc826f349fb2184a1d5e72
