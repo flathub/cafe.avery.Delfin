@@ -1,6 +1,6 @@
 app-id: cafe.avery.Delfin
 runtime: org.gnome.Platform
-runtime-version: "45"
+runtime-version: "46"
 sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
@@ -454,5 +454,5 @@ modules:
       - "-Dflatpak=true"
     sources:
       - type: archive
-        url: https://codeberg.org/avery42/delfin/releases/download/v0.4.4/delfin-flatpak-dist-v0.4.4.tar.xz
-        sha256: 5b1eec4bd586bf53940ad392d0149d7c21582f6112e7d61964da9a7bd4b6c91f
+        url: https://codeberg.org/avery42/delfin/releases/download/v0.4.5/delfin-flatpak-dist-v0.4.5.tar.xz
+        sha256: d7baeb561178a1b2e2e49a5f855ef910c4e5472db1f5a7fb74ee3aec9192280f
