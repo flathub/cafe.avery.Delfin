@@ -98,13 +98,8 @@ modules:
             mirror-urls:
               - https://luajit.org/git/luajit.git
             disable-shallow-clone: true
+            # branch: v2.1
             commit: eec7a8016c3381b949b5d84583800d05897fa960
-            x-checker-data:
-              type: json
-              url: https://api.github.com/repos/LuaJIT/LuaJIT/commits
-              commit-query: first( .[].sha )
-              version-query: first( .[].sha )
-              timestamp-query: first( .[].commit.committer.date )
           - type: shell
             commands:
               - sed -i 's|/usr/local|/app|' ./Makefile
@@ -231,15 +226,8 @@ modules:
         sources:
           - type: git
             url: https://code.videolan.org/videolan/x264.git
-            commit: 32c3b801191522961102d4bea292cdb61068d0dd
-            # Every commit to the master branch is considered a release
-            # https://code.videolan.org/videolan/x264/-/issues/35
-            x-checker-data:
-              type: json
-              url: https://code.videolan.org/api/v4/projects/536/repository/commits
-              commit-query: first( .[].id )
-              version-query: first( .[].id )
-              timestamp-query: first( .[].committed_date )
+            # branch: stable
+            commit: 31e19f92f00c7003fa115047ce50978bc98c3a0d
 
       - name: x265
         buildsystem: cmake
