@@ -1,10 +1,10 @@
 app-id: cafe.avery.Delfin
 runtime: org.gnome.Platform
-runtime-version: "46"
+runtime-version: "48"
 sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
-  - org.freedesktop.Sdk.Extension.llvm16
+  - org.freedesktop.Sdk.Extension.llvm20
 
 command: delfin
 
@@ -21,13 +21,13 @@ finish-args:
   - --socket=pulseaudio
 
 build-options:
-  append-path: "/usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm16/bin"
+  append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm20/bin
   env:
     CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
     CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER: clang
-    CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUSTFLAGS: "-C link-arg=-fuse-ld=/usr/lib/sdk/rust-stable/bin/mold"
+    CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUSTFLAGS: -C link-arg=-fuse-ld=/usr/lib/sdk/rust-stable/bin/mold
     CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: clang
-    CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS: "-C link-arg=-fuse-ld=/usr/lib/sdk/rust-stable/bin/mold"
+    CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS: -C link-arg=-fuse-ld=/usr/lib/sdk/rust-stable/bin/mold
 
 cleanup:
   - "*.a"
@@ -43,23 +43,22 @@ modules:
       - -Dmanpage-build=disabled
       - -Dlibarchive=enabled
       - -Dsdl2=enabled
-      - -Dshaderc=enabled
       - -Dvulkan=enabled
     cleanup:
       - /include
       - /lib/pkgconfig
     sources:
       - type: archive
-        url: https://github.com/mpv-player/mpv/archive/refs/tags/v0.37.0.tar.gz
-        sha256: 1d2d4adbaf048a2fa6ee134575032c4b2dad9a7efafd5b3e69b88db935afaddf
+        url: https://github.com/mpv-player/mpv/archive/refs/tags/v0.40.0.tar.gz
+        sha256: 10a0f4654f62140a6dd4d380dcf0bbdbdcf6e697556863dc499c296182f081a3
     modules:
       - name: libXmu
         buildsystem: autotools
         sources:
           - type: git
             url: https://gitlab.freedesktop.org/xorg/lib/libxmu.git
-            tag: libXmu-1.1.4
-            commit: b29c739b577ee142877e69eb3fb07c7312d81557
+            tag: libXmu-1.2.1
+            commit: 792f80402ee06ce69bca3a8f2a84295999c3a170
             x-checker-data:
               type: git
               tag-pattern: ^libXmu-([\d.]+)$
@@ -99,7 +98,7 @@ modules:
             mirror-urls:
               - https://luajit.org/git/luajit.git
             disable-shallow-clone: true
-            commit: 343ce0edaf3906a62022936175b2f5410024cbfc
+            commit: eec7a8016c3381b949b5d84583800d05897fa960
             x-checker-data:
               type: json
               url: https://api.github.com/repos/LuaJIT/LuaJIT/commits
@@ -139,8 +138,8 @@ modules:
         sources:
           - type: git
             url: https://github.com/libass/libass.git
-            tag: 0.17.1
-            commit: e8ad72accd3a84268275a9385beb701c9284e5b3
+            tag: 0.17.3
+            commit: e46aedea0a0d17da4c4ef49d84b94a7994664ab5
             x-checker-data:
               type: git
               tag-pattern: ^(\d\.\d{1,3}\.\d{1,2})$
@@ -174,8 +173,8 @@ modules:
             url: https://github.com/breakfastquay/rubberband.git
             mirror-urls:
               - https://hg.sr.ht/~breakfastquay/rubberband
-            tag: v3.3.0
-            commit: 2be46b0dffb13273a67396c77bc9278736bb03d2
+            tag: v4.0.0
+            commit: 1d95888bec3ae0a17c0c4af791810d5a63f6bc35
             x-checker-data:
               type: git
               tag-pattern: ^v([\d.]+)$
@@ -197,8 +196,8 @@ modules:
             url: https://github.com/ccxvii/mujs.git
             mirror-urls:
               - http://git.ghostscript.com/mujs.git
-            tag: 1.3.4
-            commit: a76d157bdaa9aec8de5ea5a362eed2f59139152d
+            tag: 1.3.6
+            commit: cc569c5fa9a7a2498177693b5617605c2ff5b260
             x-checker-data:
               type: git
               url: https://api.github.com/repos/ccxvii/mujs/tags
@@ -215,8 +214,8 @@ modules:
             url: https://github.com/FFmpeg/nv-codec-headers.git
             mirror-urls:
               - https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
-            tag: n12.1.14.0
-            commit: 1889e62e2d35ff7aa9baca2bceb14f053785e6f1
+            tag: n13.0.19.0
+            commit: e844e5b26f46bb77479f063029595293aa8f812d
             x-checker-data:
               type: git
               tag-pattern: ^n([\d.]+)$
@@ -232,7 +231,7 @@ modules:
         sources:
           - type: git
             url: https://code.videolan.org/videolan/x264.git
-            commit: 4815ccadb1890572f2bf8b9d9553d56f6c9122ad
+            commit: 32c3b801191522961102d4bea292cdb61068d0dd
             # Every commit to the master branch is considered a release
             # https://code.videolan.org/videolan/x264/-/issues/35
             x-checker-data:
@@ -255,8 +254,8 @@ modules:
         sources:
           - type: git
             url: https://bitbucket.org/multicoreware/x265_git.git
-            tag: "3.5"
-            commit: f0c1022b6be121a753ff02853fbe33da71988656
+            tag: "4.1"
+            commit: 1d117bed4747758b51bd2c124d738527e30392cb
             x-checker-data:
               type: git
               tag-pattern: ^([\d.]+)$
@@ -267,8 +266,8 @@ modules:
           - -DBUILD_TESTS=OFF
         sources:
           - type: git
-            commit: 33974839677da7044ef5a70be7ad5550735aae6e
-            tag: v1.3.2
+            commit: 444d2c1d7ececf5cc2d96d3b17b209047b02318d
+            tag: v1.3.3
             url: https://github.com/hoene/libmysofa.git
             x-checker-data:
               type: git
@@ -296,21 +295,6 @@ modules:
             commands:
               - sed -i -e 's/lzma/xz/g' configure.ac
               - autoreconf -vif
-
-      - name: libjxl
-        buildsystem: cmake
-        config-opts:
-          - -DCMAKE_BUILD_TYPE=Release
-          - -DBUILD_TESTING=OFF
-        sources:
-          - type: git
-            url: https://github.com/libjxl/libjxl.git
-            tag: v0.9.1
-            commit: b8ceae3a6e9d0ffd9efebcbdd04322fcfc502eed
-            disable-shallow-clone: true
-            x-checker-data:
-              type: git
-              tag-pattern: ^v([\d.]+)$
 
       - name: ffmpeg
         cleanup:
@@ -347,8 +331,8 @@ modules:
             url: https://github.com/FFmpeg/FFmpeg.git
             mirror-urls:
               - https://git.ffmpeg.org/ffmpeg.git
-            commit: e38092ef9395d7049f871ef4d5411eb410e283e0
-            tag: n6.1.1
+            commit: db69d06eeeab4f46da15030a80d539efb4503ca8
+            tag: n7.1.1
             x-checker-data:
               type: git
               tag-pattern: ^n([\d.]{3,7})$
@@ -361,8 +345,8 @@ modules:
         sources:
           - type: archive
             archive-type: tar
-            url: https://api.github.com/repos/libsixel/libsixel/tarball/refs/tags/v1.10.3
-            sha256: 7be774befba882d53701e131b6657836118f6cdb15a7515f92345c7bb6e2bb5c
+            url: https://api.github.com/repos/libsixel/libsixel/tarball/refs/tags/v1.10.5
+            sha256: 402da9e24caea62fe1e4c5d6f9c9211141f7a5d8016e717527ecde10c5522344
             x-checker-data:
               type: json
               url: https://api.github.com/repos/libsixel/libsixel/tags
@@ -376,8 +360,8 @@ modules:
         sources:
           - type: git
             url: https://github.com/vapoursynth/vapoursynth.git
-            tag: R65
-            commit: 3157049549a0940359b37004aeeeebd8f1db665e
+            tag: R71
+            commit: 40608b5552b035a8599e0a5fe57272287f9cf640
             x-checker-data:
               type: git
               tag-pattern: ^R([\d.]+)$
@@ -395,63 +379,16 @@ modules:
             url: https://code.videolan.org/videolan/libplacebo.git
             mirror-urls:
               - https://github.com/haasn/libplacebo.git
-            tag: v6.338.2
-            commit: 64c1954570f1cd57f8570a57e51fb0249b57bb90
+            tag: v7.349.0
+            commit: 1fd3c7bde7b943fe8985c893310b5269a09b46c5
             x-checker-data:
               type: git
               tag-pattern: ^v([\d.]+)$
-        modules:
-          - name: shaderc
-            buildsystem: cmake-ninja
-            builddir: true
-            config-opts:
-              - -DSHADERC_SKIP_COPYRIGHT_CHECK=ON
-              - -DSHADERC_SKIP_EXAMPLES=ON
-              - -DSHADERC_SKIP_TESTS=ON
-              - -DSPIRV_SKIP_EXECUTABLES=ON
-              - -DENABLE_GLSLANG_BINARIES=OFF
-            cleanup:
-              - /bin
-              - /include
-              - /lib/cmake
-              - /lib/pkgconfig
-            sources:
-              - type: git
-                url: https://github.com/google/shaderc.git
-                #tag: v2023.7
-                commit: 40bced4e1e205ecf44630d2dfa357655b6dabd04
-                #x-checker-data:
-                #  type: git
-                #  tag-pattern: ^v(\d{4}\.\d{1,2})$
-              - type: git
-                url: https://github.com/KhronosGroup/SPIRV-Tools.git
-                tag: v2023.2
-                commit: 44d72a9b36702f093dd20815561a56778b2d181e
-                dest: third_party/spirv-tools
-                x-checker-data:
-                  type: git
-                  tag-pattern: ^v(\d{4}\.\d{1})$
-              - type: git
-                url: https://github.com/KhronosGroup/SPIRV-Headers.git
-                tag: sdk-1.3.250.1
-                commit: 268a061764ee69f09a477a695bf6a11ffe311b8d
-                dest: third_party/spirv-headers
-                #x-checker-data:
-                #  type: git
-                #  tag-pattern: ^sdk-([\d.]+)$
-              - type: git
-                url: https://github.com/KhronosGroup/glslang.git
-                tag: 14.0.0
-                commit: a91631b260cba3f22858d6c6827511e636c2458a
-                dest: third_party/glslang
-                x-checker-data:
-                  type: git
-                  tag-pattern: ^(\d{1,2}\.\d{1,2}\.\d{1,4})$
   - name: delfin
     buildsystem: meson
     config-opts:
-      - "-Dprofile=release"
-      - "-Dflatpak=true"
+      - -Dprofile=release
+      - -Dflatpak=true
     sources:
       - type: archive
         url: https://codeberg.org/avery42/delfin/releases/download/v0.4.8/delfin-flatpak-dist-v0.4.8.tar.xz
