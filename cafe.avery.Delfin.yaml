@@ -142,8 +142,6 @@ modules:
         sources:
           - type: git
             url: https://github.com/breakfastquay/rubberband.git
-            mirror-urls:
-              - https://hg.sr.ht/~breakfastquay/rubberband
             tag: v4.0.0
             commit: 1d95888bec3ae0a17c0c4af791810d5a63f6bc35
             x-checker-data:
@@ -261,8 +259,6 @@ modules:
         sources:
           - type: git
             url: https://github.com/FFmpeg/FFmpeg.git
-            mirror-urls:
-              - https://git.ffmpeg.org/ffmpeg.git
             commit: 9047fa1b084f76b1b4d065af2d743df1b40dfb56
             tag: n8.1
             x-checker-data:
@@ -305,8 +301,6 @@ modules:
         sources:
           - type: git
             url: https://code.videolan.org/videolan/libplacebo.git
-            mirror-urls:
-              - https://github.com/haasn/libplacebo.git
             tag: v7.360.1
             commit: cee9b076f2c63104ccfd497fa79c39a867293ec4
             x-checker-data:
