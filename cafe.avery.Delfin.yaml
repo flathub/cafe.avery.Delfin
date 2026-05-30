@@ -1,6 +1,6 @@
 app-id: cafe.avery.Delfin
 runtime: org.gnome.Platform
-runtime-version: "48"
+runtime-version: '50'
 sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
@@ -30,8 +30,16 @@ build-options:
     CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS: -C link-arg=-fuse-ld=/usr/lib/sdk/rust-stable/bin/mold
 
 cleanup:
-  - "*.a"
-  - "*.la"
+  - /include
+  - /lib/cmake
+  - /lib/pkgconfig
+  - /share/bash-completion
+  - /share/doc
+  - /share/ladspa
+  - /share/man
+  - /share/zsh
+  - '*.a'
+  - '*.la'
 
 modules:
   - name: libmpv
@@ -42,23 +50,20 @@ modules:
       - -Dlibmpv=true
       - -Dmanpage-build=disabled
       - -Dlibarchive=enabled
-      - -Dsdl2=enabled
+      # - -Dsdl2=enabled
       - -Dvulkan=enabled
-    cleanup:
-      - /include
-      - /lib/pkgconfig
     sources:
       - type: archive
-        url: https://github.com/mpv-player/mpv/archive/refs/tags/v0.40.0.tar.gz
-        sha256: 10a0f4654f62140a6dd4d380dcf0bbdbdcf6e697556863dc499c296182f081a3
+        url: https://github.com/mpv-player/mpv/archive/refs/tags/v0.41.0.tar.gz
+        sha256: ee21092a5ee427353392360929dc64645c54479aefdb5babc5cfbb5fad626209
     modules:
       - name: libXmu
         buildsystem: autotools
         sources:
           - type: git
             url: https://gitlab.freedesktop.org/xorg/lib/libxmu.git
-            tag: libXmu-1.2.1
-            commit: 792f80402ee06ce69bca3a8f2a84295999c3a170
+            tag: libXmu-1.3.1
+            commit: cdf280f6611932f79ab872832974e8043b1cad6d
             x-checker-data:
               type: git
               tag-pattern: ^libXmu-([\d.]+)$
@@ -68,7 +73,7 @@ modules:
         sources:
           - type: git
             url: https://github.com/astrand/xclip.git
-            tag: "0.13"
+            tag: '0.13'
             commit: 9aa7090c3b8b437c6489edca32ae43d82e0c1281
             x-checker-data:
               type: git
@@ -79,41 +84,22 @@ modules:
         sources:
           - type: git
             url: https://gitlab.freedesktop.org/xorg/lib/libxpresent.git
-            tag: libXpresent-1.0.1
-            commit: 37507b5f44332accfb1064ee69a4f6a833994747
+            tag: libXpresent-1.0.2
+            commit: 4d92149372461bf575e8a09b1064a2884c38c3aa
             x-checker-data:
               type: git
               tag-pattern: ^libXpresent-([\d.]+)$
 
-      - name: luajit
-        no-autogen: true
-        cleanup:
-          - /bin
-          - /include
-          - /lib/pkgconfig
-          - /share/man
-        sources:
-          - type: git
-            url: https://github.com/LuaJIT/LuaJIT.git
-            mirror-urls:
-              - https://luajit.org/git/luajit.git
-            disable-shallow-clone: true
-            # branch: v2.1
-            commit: eec7a8016c3381b949b5d84583800d05897fa960
-          - type: shell
-            commands:
-              - sed -i 's|/usr/local|/app|' ./Makefile
+      - shared-modules/luajit/luajit.json
 
       - name: uchardet
         buildsystem: cmake-ninja
         config-opts:
           - -DCMAKE_BUILD_TYPE=Release
           - -DBUILD_STATIC=0
+          - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
         cleanup:
           - /bin
-          - /include
-          - /lib/pkgconfig
-          - /share/man
         sources:
           - type: archive
             url: https://www.freedesktop.org/software/uchardet/releases/uchardet-0.0.8.tar.xz
@@ -125,16 +111,13 @@ modules:
               url-template: https://www.freedesktop.org/software/uchardet/releases/uchardet-$version.tar.xz
 
       - name: libass
-        cleanup:
-          - /include
-          - /lib/pkgconfig
         config-opts:
           - --disable-static
         sources:
           - type: git
             url: https://github.com/libass/libass.git
-            tag: 0.17.3
-            commit: e46aedea0a0d17da4c4ef49d84b94a7994664ab5
+            tag: 0.17.4
+            commit: bbb3c7f1570a4a021e52683f3fbdf74fe492ae84
             x-checker-data:
               type: git
               tag-pattern: ^(\d\.\d{1,3}\.\d{1,2})$
@@ -142,15 +125,11 @@ modules:
       - name: zimg
         config-opts:
           - --disable-static
-        cleanup:
-          - /include
-          - /lib/pkgconfig
-          - /share/doc
         sources:
           - type: archive
             archive-type: tar
-            url: https://api.github.com/repos/sekrit-twc/zimg/tarball/release-3.0.5
-            sha256: 1b8998f03f4a49e4d730033143722b32bc28a5306ef809ccfb3b4bbb29e4b784
+            url: https://api.github.com/repos/sekrit-twc/zimg/tarball/release-3.0.6
+            sha256: 15140e491c4ce9db5f02a038d8a1eb53e9151b55eeed06a2899425a6ebfef367
             x-checker-data:
               type: json
               url: https://api.github.com/repos/sekrit-twc/zimg/releases/latest
@@ -160,14 +139,9 @@ modules:
 
       - name: rubberband
         buildsystem: meson
-        cleanup:
-          - /include
-          - /lib/pkgconfig
         sources:
           - type: git
             url: https://github.com/breakfastquay/rubberband.git
-            mirror-urls:
-              - https://hg.sr.ht/~breakfastquay/rubberband
             tag: v4.0.0
             commit: 1d95888bec3ae0a17c0c4af791810d5a63f6bc35
             x-checker-data:
@@ -184,42 +158,19 @@ modules:
           - install-shared
         cleanup:
           - /bin
-          - /include
-          - /lib/pkgconfig
         sources:
-          - type: git
-            url: https://github.com/ccxvii/mujs.git
-            mirror-urls:
-              - http://git.ghostscript.com/mujs.git
-            tag: 1.3.6
-            commit: cc569c5fa9a7a2498177693b5617605c2ff5b260
-            x-checker-data:
-              type: git
-              url: https://api.github.com/repos/ccxvii/mujs/tags
-              tag-pattern: ^([\d.]+)$
-
-      - name: nv-codec-headers
-        cleanup:
-          - "*"
-        no-autogen: true
-        make-install-args:
-          - PREFIX=/app
-        sources:
-          - type: git
-            url: https://github.com/FFmpeg/nv-codec-headers.git
-            mirror-urls:
-              - https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
-            tag: n13.0.19.0
-            commit: e844e5b26f46bb77479f063029595293aa8f812d
-            x-checker-data:
-              type: git
-              tag-pattern: ^n([\d.]+)$
+          - type: archive
+            url: https://codeberg.org/ccxvii/mujs/archive/1.3.8.tar.gz
+            sha256: 10e8548033924ada0828a821777371861ea3e127d472e8423ad87426118291d9
+          # The unicode character database files are downloaded in the makefile rules `UnicodeData.txt` and `SpecialCasing.txt`.
+          - type: file
+            url: https://www.unicode.org/Public/16.0.0/ucd/UnicodeData.txt
+            sha256: ff58e5823bd095166564a006e47d111130813dcf8bf234ef79fa51a870edb48f
+          - type: file
+            url: https://www.unicode.org/Public/16.0.0/ucd/SpecialCasing.txt
+            sha256: 8d5de354eef79f2395a54c9c7dcebbaf3d30fc962d0f85611ea97aa973a0c451
 
       - name: x264
-        cleanup:
-          - /include
-          - /lib/pkgconfig
-          - /share/man
         config-opts:
           - --disable-cli
           - --enable-shared
@@ -235,15 +186,11 @@ modules:
         config-opts:
           - -DCMAKE_BUILD_TYPE=Release
           - -DBUILD_STATIC=0
-        cleanup:
-          - /include
-          - /lib/pkgconfig
-          - /share/man
         sources:
           - type: git
             url: https://bitbucket.org/multicoreware/x265_git.git
-            tag: "4.1"
-            commit: 1d117bed4747758b51bd2c124d738527e30392cb
+            tag: '4.2'
+            commit: e444744c03978c1fb4e037168967020cf2648427
             x-checker-data:
               type: git
               tag-pattern: ^([\d.]+)$
@@ -254,8 +201,8 @@ modules:
           - -DBUILD_TESTS=OFF
         sources:
           - type: git
-            commit: 444d2c1d7ececf5cc2d96d3b17b209047b02318d
-            tag: v1.3.3
+            commit: 7a0c07111a3d7230ec534e08925c24a7525f33c0
+            tag: v1.3.4
             url: https://github.com/hoene/libmysofa.git
             x-checker-data:
               type: git
@@ -265,9 +212,6 @@ modules:
         buildsystem: autotools
         config-opts:
           - --disable-static
-        cleanup:
-          - /include
-          - /lib/pkgconfig
         sources:
           - type: archive
             archive-type: tar
@@ -286,8 +230,6 @@ modules:
 
       - name: ffmpeg
         cleanup:
-          - /include
-          - /lib/pkgconfig
           - /share/ffmpeg/examples
         config-opts:
           - --disable-debug
@@ -317,19 +259,14 @@ modules:
         sources:
           - type: git
             url: https://github.com/FFmpeg/FFmpeg.git
-            mirror-urls:
-              - https://git.ffmpeg.org/ffmpeg.git
-            commit: db69d06eeeab4f46da15030a80d539efb4503ca8
-            tag: n7.1.1
+            commit: 9047fa1b084f76b1b4d065af2d743df1b40dfb56
+            tag: n8.1
             x-checker-data:
               type: git
               tag-pattern: ^n([\d.]{3,7})$
 
       - name: libsixel
         buildsystem: meson
-        cleanup:
-          - /include
-          - /lib/pkgconfig
         sources:
           - type: archive
             archive-type: tar
@@ -342,36 +279,34 @@ modules:
               version-query: .[0].name
 
       - name: vapoursynth
-        config-opts:
-          - --disable-static
-          - --with-python_prefix=/app
+        buildsystem: meson
         sources:
-          - type: git
-            url: https://github.com/vapoursynth/vapoursynth.git
-            tag: R71
-            commit: 40608b5552b035a8599e0a5fe57272287f9cf640
+          - type: archive
+            # without the dest-filename, flatpak-builder throws an "Unknown archive format" error
+            dest-filename: vapoursynth.tar.gz
+            url: https://api.github.com/repos/vapoursynth/vapoursynth/tarball/R74
+            sha256: d51699378e112fa81a3669c23a847cbc30d491a853e2c15ded236905698f166a
             x-checker-data:
-              type: git
-              tag-pattern: ^R([\d.]+)$
+              type: json
+              url: https://api.github.com/repos/vapoursynth/vapoursynth/releases/latest
+              version-query: .name
+              timestamp-query: .published_at
+              url-query: .tarball_url
 
       - name: libplacebo
         buildsystem: meson
         config-opts:
           - -Dvulkan=enabled
           - -Dshaderc=enabled
-        cleanup:
-          - /include
-          - /lib/pkgconfig
         sources:
           - type: git
             url: https://code.videolan.org/videolan/libplacebo.git
-            mirror-urls:
-              - https://github.com/haasn/libplacebo.git
-            tag: v7.349.0
-            commit: 1fd3c7bde7b943fe8985c893310b5269a09b46c5
+            tag: v7.360.1
+            commit: cee9b076f2c63104ccfd497fa79c39a867293ec4
             x-checker-data:
               type: git
               tag-pattern: ^v([\d.]+)$
+
   - name: delfin
     buildsystem: meson
     config-opts:
